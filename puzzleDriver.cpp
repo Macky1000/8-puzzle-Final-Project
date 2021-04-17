@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
             cout << matrix[i] << " ";
             if(i == 2 || i == 5) {cout << endl;}
         }
-        cout << endl;
+        cout << "\n\n";
         //cout << "string: "<< matrix << endl;
 
         find_adjacent();
