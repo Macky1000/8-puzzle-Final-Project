@@ -13,7 +13,12 @@ const int MATRIX_SIZE = 9;
 extern vector<string> que;
 extern string matrix;
 
-//void readInput(const string& defaultInput, int& matrix);
+struct puzzle
+{
+    /* data */
+};
+
+
 void read_input();
 int get_zero_pos();
 void find_adjacent();

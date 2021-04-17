@@ -36,11 +36,13 @@ int main(int argc, char *argv[]){
             if(i == 2 || i == 5) {cout << endl;}
         }
         cout << endl;
-        
+        //cout << "string: "<< matrix << endl;
+
         find_adjacent();
         for (int i = 0; i < que.size(); ++i)
         {
             cout << "Possible move #" << i+1 << ": " << que[i] << endl;
+            
         }
         //readInput("defaultInput.txt", matrix);
     }
