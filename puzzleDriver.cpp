@@ -1,13 +1,17 @@
 #include "puzzle.h"
-#include <string>
+/*#include <string>
 #include <iostream>
-#include <fstream>
-using namespace std;
+#include <fstream>*/
+//using namespace std;
 
+//const int MATRIX_SIZE = 9;
 
+vector<string> que;
+string matrix;
 
 int main(int argc, char *argv[]){
     //cout << "num of arguments: " << argc << endl;
+    
 
     if(argc == 2){ //in case we wanna test stuff on the fly. Simply run the program with an argument of 9 characters to represent the matrix and it will take that for testing. Otherwise it will just use a default input file.
         string input = argv[1];
@@ -22,11 +26,23 @@ int main(int argc, char *argv[]){
         }
         
     } else {
-        //cout << "using default thing yo" << endl;
-        //string input = ;
-        readInput("defaultInput.txt");
-        return 1;
-        //ifstream in()
+        
+        read_input();
+
+        cout << "Input matrix: \n";
+        for (int i = 0; i < MATRIX_SIZE; ++i)
+        {
+            cout << matrix[i] << " ";
+            if(i == 2 || i == 5) {cout << endl;}
+        }
+        cout << endl;
+        /*
+        find_adjacent();
+        for (int i = 0; i < que.size(); ++i)
+        {
+            cout << "Possible move #" << i+1 << ": " << que[i] << endl;
+        }*/
+        //readInput("defaultInput.txt", matrix);
     }
     return 0;
 
