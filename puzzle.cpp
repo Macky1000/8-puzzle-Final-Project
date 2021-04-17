@@ -90,8 +90,6 @@ void find_adjacent()
         string slide = matrix;
         swap(slide[pos], slide[pos-3]);
         que.push_back(slide);
-
-        
     }
 
     if (row != 2)  // Try to move the zero tile down
@@ -99,7 +97,6 @@ void find_adjacent()
         string slide = matrix;
         swap(slide[pos], slide[pos+3]);
         que.push_back(slide);
-
     }
 
     if (col != 0)  // Try to move the zero tile left
@@ -107,7 +104,6 @@ void find_adjacent()
         string slide = matrix;
         swap(slide[pos], slide[pos-1]);
         que.push_back(slide);
-
     }
 
     if (col != 2)  // Try to move the zero tile right
@@ -115,7 +111,6 @@ void find_adjacent()
         string slide = matrix;
         swap(slide[pos], slide[pos+1]);
         que.push_back(slide);
-        
     }
 
     

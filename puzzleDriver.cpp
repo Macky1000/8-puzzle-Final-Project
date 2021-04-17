@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
         } else {
             cout << "invalid argument." << endl; //just in case we mess up
             return 1; 
-        }
+        }//still need to fix this up
         
     } else {
         
@@ -39,9 +39,17 @@ int main(int argc, char *argv[]){
         //cout << "string: "<< matrix << endl;
 
         find_adjacent();
+
         for (int i = 0; i < que.size(); ++i)
         {
             cout << "Possible move #" << i+1 << ": " << que[i] << endl;
+            for (int j = 0; j < MATRIX_SIZE; ++j)
+            {
+                cout << que[i][j] << " ";
+                if(j == 2 || j == 5) {cout << endl;}
+            }
+            cout << "\n\n";
+            
             
         }
         //readInput("defaultInput.txt", matrix);
