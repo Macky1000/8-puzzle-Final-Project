@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     //cout << "num of arguments: " << argc << endl;
     
 
-    if(argc == 2){ //in case we wanna test stuff on the fly. Simply run the program with an argument of 9 characters to represent the matrix and it will take that for testing. Otherwise it will just use a default input file.
+    /*if(argc == 2){ //in case we wanna test stuff on the fly. Simply run the program with an argument of 9 characters to represent the matrix and it will take that for testing. Otherwise it will just use a default input file.
         string input = argv[1];
         if(input.length() == 9){
             for(int i = 0; i <= 9; i++){ //this formats the input 
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
             return 1; 
         }//still need to fix this up
         
-    } else {
+    } else {*/
         
         read_input();
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
             
         }
         //readInput("defaultInput.txt", matrix);
-    }
+    //}
     return 0;
 
 }
