@@ -10,6 +10,12 @@ vector<string> que;
 string matrix;
 
 int main(int argc, char *argv[]){
+    
+    
+    
+    
+    
+    
     //cout << "num of arguments: " << argc << endl;
     
 
@@ -25,7 +31,7 @@ int main(int argc, char *argv[]){
             return 1; 
         }//still need to fix this up
         
-    } else {*/
+    } else {
         
         read_input();
 
@@ -53,7 +59,7 @@ int main(int argc, char *argv[]){
             
         }
         //readInput("defaultInput.txt", matrix);
-    //}
+    //}*///delete this 
     return 0;
 
 }
