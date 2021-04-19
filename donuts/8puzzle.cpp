@@ -1,12 +1,15 @@
-/**************************************************
-* Algorithms Final Project                        *
-* - Nhan Dang                                     *
-* - Mackale Dickenson                             *
-* - James Mazzaro                                 *
-***************************************************/
+/****************************************************************
+*   Algorithms Final Project                                    *
+*                                                               *
+*   Authors: Nhan Dang, Mackale Dickenson, James Mazzaro        *
+*   Description: Outputs a solution to the 8-tile sliding       *
+*       puzzle using breadth-first search, depth-first search,  *
+*       or Dijkstra's algorithm                                 *
+*****************************************************************/
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -18,27 +21,28 @@ class Vertex{
         int depth;
 
     public:
-        Vertex(const string& str, const int& depth){
-            this -> str = str;
-            this -> depth = depth;
+        Vertex(const string& st, const int& dep){
+            this -> str = st;
+            this -> depth = dep;
         }
         string getStr() const { return str; }
-        int getStrValue(int index) const { return str[index]; }
+        int getStrValue() const { return stoi(str); }
         int getDepth() const { return depth; }
 };
 
 // Constant variables
 const string INPUT_FILE = "input.txt";  // Name of input file
 const int MATRIX_SIZE = 9;  // Number of matrix elements
+const int NUMBER_OFFSET = 48;    // ASCII offset for converting characters to integers
 
 // Static variables
 static int depthLimit = 32;  // Depth limit for DFS algorithm
 
 // Function declarations
 string readInput();
+string printMatrix(const string& matrix, const string& description);
 void printState(const Vertex& vert, const int& iter, bool goalFound);
 int getZeroPos(const string& matrix);
-int edgeCost(const string& first, const string& second);
 vector<Vertex> findAdjacent(const Vertex& matrix, const bool& tileDistance);
 void BFS(const string& initial, const string& goal);
 void DFS(const string& initial, const string& goal);
@@ -50,7 +54,10 @@ int main(){
     string initialMatrix = readInput();
     string goalMatrix = "123804765";
 
-    // quick and dirty user menu; unfinished
+    printMatrix(initialMatrix, "INPUT MATRIX");
+    printMatrix(goalMatrix, "GOAL MATRIX");
+
+    // User menu
     int choice;
     cout << "Type a number corresponding to an option:" << endl;
     cout << "1 - BFS" << endl;
@@ -64,7 +71,6 @@ int main(){
         cout << "Invalid choice specified. Aborting program" << endl;
         exit(EXIT_FAILURE);
     }
-
     return 0;
 }
 
@@ -87,6 +93,21 @@ string readInput(){
         }
     }
     return matrix;
+}
+
+
+// Print out a string in matrix form
+string printMatrix(const string& matrix, const string& description){
+    cout << "----- " << description << " -----" << endl;
+    for (int i = 0; i < MATRIX_SIZE; ++i){
+        if (i % 3 == 0){
+            if (i > 0){
+                cout << endl;
+            }
+        }
+        cout << matrix[i] << " ";
+    }
+    cout << endl << endl;
 }
 
 
@@ -123,12 +144,6 @@ int getZeroPos(const string& matrix){
 }
 
 
-int edgeCost(const string& first, const string& second){
-    int pos = getZeroPos(first);
-    return second[pos];
-}
-
-
 // Find and enqueue adjacent states.
 vector<Vertex> findAdjacent(const Vertex& matrix, const bool& tileCost){
     vector<Vertex> adj;
@@ -140,28 +155,28 @@ vector<Vertex> findAdjacent(const Vertex& matrix, const bool& tileCost){
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos-3]);
         if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStrValue(pos-3)));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-3] - NUMBER_OFFSET));
     }
 
     if (row != 2){  // Try to move the zero tile down
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos+3]);
         if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStrValue(pos+3)));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+3] - NUMBER_OFFSET));
     }
 
     if (col != 0){  // Try to move the zero tile left
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos-1]);
         if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStrValue(pos-1)));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-1] - NUMBER_OFFSET));
     }
 
     if (col != 2){  // Try to move the zero tile right
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos+1]);
         if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStrValue(pos+1)));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+1] - NUMBER_OFFSET));
     }
 
     return adj;
