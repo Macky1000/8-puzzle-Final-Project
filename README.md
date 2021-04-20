@@ -1,2 +1,13 @@
 # 8-puzzle-Final-Project
-You need to find a cheapest solution to the 8-puzzle. Given the initial state and the goal state of 8-puzzle, you need to use BFS, DFS, and Dijkstra algorithms.
+To run the program, navagate to the file and input these commands to the terminal:
+g++ .\8puzzle.cpp
+.\a.exe
+
+
+To change the input for the program, go to input.txt and input the desired puzzle in this format:
+
+<tile> <tile> <tile>
+<tile> <tile> <tile>
+<tile> <tile> <tile>
+
+Each <tile> is a digit from 0 to 8.
