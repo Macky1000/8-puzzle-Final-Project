@@ -40,7 +40,7 @@ static int depthLimit = 32;  // Depth limit for DFS algorithm
 
 // Function declarations
 string readInput();
-string printMatrix(const string& matrix, const string& description);
+void printMatrix(const string& matrix, const string& description);
 void printState(const Vertex& vert, const int& iter, bool goalFound);
 int getZeroPos(const string& matrix);
 vector<Vertex> findAdjacent(const Vertex& matrix, const bool& tileDistance);
@@ -62,7 +62,7 @@ int main(){
     cout << "Type a number corresponding to an option:" << endl;
     cout << "1 - BFS" << endl;
     cout << "2 - DFS" << endl;
-    cout << "3 - Dijkstra (unfinished)" << endl;
+    cout << "3 - Dijkstra" << endl;
     cin >> choice;
     if (choice == 1) BFS(initialMatrix, goalMatrix);
     else if (choice == 2) DFS(initialMatrix, goalMatrix);
@@ -97,7 +97,7 @@ string readInput(){
 
 
 // Print out a string in matrix form
-string printMatrix(const string& matrix, const string& description){
+void printMatrix(const string& matrix, const string& description){
     cout << "----- " << description << " -----" << endl;
     for (int i = 0; i < MATRIX_SIZE; ++i){
         if (i % 3 == 0){
