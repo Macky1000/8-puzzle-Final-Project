@@ -19,6 +19,7 @@ class Vertex{
     private:
         string str;
         int depth;
+        //string prevStr;
 
     public:
         Vertex(const string& st, const int& dep){
@@ -28,6 +29,7 @@ class Vertex{
         string getStr() const { return str; }
         int getStrValue() const { return stoi(str); }
         int getDepth() const { return depth; }
+
 };
 
 // Constant variables
@@ -37,6 +39,7 @@ const int NUMBER_OFFSET = 48;    // ASCII offset for converting characters to in
 
 // Static variables
 static int depthLimit = 32;  // Depth limit for DFS algorithm
+static bool debug = false;  // Flag to print out intermediate steps and debug information. Set to true to output information.
 
 // Function declarations
 string readInput();
@@ -58,12 +61,25 @@ int main(){
     printMatrix(goalMatrix, "GOAL MATRIX");
 
     // User menu
-    int choice;
-    cout << "Type a number corresponding to an option:" << endl;
+    int choice, choice2;
+    cout << "Type a number corresponding to an option: " << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "1 - BFS" << endl;
     cout << "2 - DFS" << endl;
     cout << "3 - Dijkstra" << endl;
+    cout << "Selection: ";
     cin >> choice;
+
+    cout << "\nType a number corresponding to an option: " << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    cout << "1 - user mode: only output the final path cost" << endl;
+    cout << "2 - debug mode: prints all intermediate matrices as they are visited !MUCH SLOWER!" << endl;
+    cout << "Selection: ";
+    cin >> choice2;
+    cout << endl;
+
+    if (choice2 == 2){debug = true; }; //debug is already set to false so it will automatically default to false in case of user error.
+
     if (choice == 1) BFS(initialMatrix, goalMatrix);
     else if (choice == 2) DFS(initialMatrix, goalMatrix);
     else if (choice == 3) Dijkstra(initialMatrix, goalMatrix);
@@ -127,7 +143,7 @@ void printState(const Vertex& vert, const int& iter, bool goalFound){
     }
     cout << "\n--------------------" << endl;
     if (goalFound){
-        cout << "Solution: Path cost = " << vert.getDepth() << endl;
+        cout << "Solution: The shortest path cost = " << vert.getDepth() << endl;
     }
 }
 
@@ -202,17 +218,18 @@ void BFS(const string& initial, const string& goal){
             Vertex current(que[0].getStr(), que[0].getDepth());    // Assign the "current" vertex to the element at the front of the queue
             que.erase(que.begin());    // Remove the element at the front of the queue
             if (visited.count(current.getStr()) != 0){    //  If the current vertex has already been visited...
-                printState(current, iter, false);
+                if(debug) printState(current, iter, false);
                 continue;    // Start the next loop iteration
             }
             else{    // If the current vertex has not already been visited...
                 visited.insert({current.getStr(), 1});    // Add the current vertex to the visited list
                 if (current.getStr() == goal){    // Check if the goal has been found
-                    printState(current, iter, true);
+                    if(debug) printState(current, iter, true);
+                    cout << "Solution: The shortest path cost = " << current.getDepth() << endl;
                     break;
                 }
                 append(que, findAdjacent(current, false));  // Append adjacent vertices to the queue
-                printState(current, iter, false);
+                if(debug) printState(current, iter, false);
             }
         }
     }
@@ -236,10 +253,11 @@ void RecDFS(Vertex current, const string& goal, unordered_map<string, int>& visi
     }
     iter += 1;
     visited.insert({current.getStr(), 1});    // Add the current vertex to the visited list
-    printState(current, iter, false);
+    if(debug) printState(current, iter, false);
     if (current.getStr() == goal){    // Check if the goal has been found
         goalFound = true;
-        printState(current, iter, true);
+        if(debug) printState(current, iter, true);
+        cout << "Solution: The shortest path cost = " << current.getDepth() << endl;
     }
     vector<Vertex> adj = findAdjacent(current, false);    // Find adjacent vertices
     for (unsigned i = 0; i < adj.size(); ++i){    // For each adjacent vertex...
@@ -266,11 +284,12 @@ void Dijkstra(const string& initial, const string& goal){
         adj.erase(adj.begin());    // Pop the minimum depth vertex from the list
         visited.insert({current.getStr(), 1});    // Add the current vertex to the visited list
         if (current.getStr() == goal){
-            printState(current, iter, true);
+            if(debug) printState(current, iter, true);
+            cout << "Solution: The shortest path cost = " << current.getDepth() << endl;
             break;
         }
         else{
-            printState(current, iter, false);
+            if(debug) printState(current, iter, false);
             int adjInitialSize = adj.size() - 1;    // Keep track of the current size of adj
             append(adj, findAdjacent(current, true));    // Append adjacent vertices to adj
             for (unsigned i = adjInitialSize; i < adj.size(); ++i){    // For each newly appended adjacent vertex...
