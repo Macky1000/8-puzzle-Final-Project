@@ -217,7 +217,7 @@ void BFS(const string& initial, const string& goal){
     while (true){
         iter += 1;
         if (que.size() > 0){    // If the queue is not empty...
-            Vertex current(que[0].getStr(), que[0].getDepth(), );    // Assign the "current" vertex to the element at the front of the queue
+            Vertex current(que[0].getStr(), que[0].getDepth());    // Assign the "current" vertex to the element at the front of the queue
             que.erase(que.begin());    // Remove the element at the front of the queue
             if (visited.count(current.getStr()) != 0){    //  If the current vertex has already been visited...
                 if(debug) printState(current, iter, false);
