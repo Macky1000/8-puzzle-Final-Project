@@ -19,17 +19,18 @@ class Vertex{
     private:
         string str;
         int depth;
-        //string prevStr;
+        Vertex* prevVert;
 
     public:
-        Vertex(const string& st, const int& dep){
+        Vertex(const string& st, const int& dep, Vertex* ptr){
             this -> str = st;
             this -> depth = dep;
+            this -> prevVert = ptr;
         }
         string getStr() const { return str; }
         int getStrValue() const { return stoi(str); }
         int getDepth() const { return depth; }
-
+        Vertex* getPrevVert() const { return prevVert; }
 };
 
 // Constant variables
@@ -51,6 +52,7 @@ void BFS(const string& initial, const string& goal);
 void DFS(const string& initial, const string& goal);
 void RecDFS(Vertex current, const string& goal, unordered_map<string, int>& visited, int& iter, bool& goalFound);
 void Dijkstra(const string& initial, const string& goal);
+void goalFound(Vertex* finalVert);
 
 
 int main(){
@@ -170,29 +172,29 @@ vector<Vertex> findAdjacent(const Vertex& matrix, const bool& tileCost){
     if (row != 0){  // Try to move the zero tile up
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos-3]);
-        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-3] - NUMBER_OFFSET));
+        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1, matrix.getPrevVert()));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-3] - NUMBER_OFFSET, matrix.getPrevVert()));
     }
 
     if (row != 2){  // Try to move the zero tile down
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos+3]);
-        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+3] - NUMBER_OFFSET));
+        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1, matrix.getPrevVert()));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+3] - NUMBER_OFFSET, matrix.getPrevVert()));
     }
 
     if (col != 0){  // Try to move the zero tile left
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos-1]);
-        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-1] - NUMBER_OFFSET));
+        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1, matrix.getPrevVert()));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos-1] - NUMBER_OFFSET, matrix.getPrevVert()));
     }
 
     if (col != 2){  // Try to move the zero tile right
         string slide = matrix.getStr();
         swap(slide[pos], slide[pos+1]);
-        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1));
-        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+1] - NUMBER_OFFSET));
+        if (!tileCost) adj.push_back(Vertex(slide, matrix.getDepth() + 1, matrix.getPrevVert()));
+        else adj.push_back(Vertex(slide, matrix.getDepth() + matrix.getStr()[pos+1] - NUMBER_OFFSET, matrix.getPrevVert()));
     }
 
     return adj;
@@ -211,11 +213,11 @@ void BFS(const string& initial, const string& goal){
     int iter = 0;
     vector<Vertex> que, adj;
     unordered_map<string, int> visited;
-    que.push_back(Vertex(initial, 0));  // Add the initial vertex to the queue
+    que.push_back(Vertex(initial, 0, nullptr));  // Add the initial vertex to the queue
     while (true){
         iter += 1;
         if (que.size() > 0){    // If the queue is not empty...
-            Vertex current(que[0].getStr(), que[0].getDepth());    // Assign the "current" vertex to the element at the front of the queue
+            Vertex current(que[0].getStr(), que[0].getDepth(), );    // Assign the "current" vertex to the element at the front of the queue
             que.erase(que.begin());    // Remove the element at the front of the queue
             if (visited.count(current.getStr()) != 0){    //  If the current vertex has already been visited...
                 if(debug) printState(current, iter, false);
@@ -242,7 +244,7 @@ void DFS(const string& initial, const string& goal){
     int iter = 0;
     bool goalFound = false;
     unordered_map<string, int> visited;
-    RecDFS(Vertex(initial, 0), goal, visited, iter, goalFound);
+    RecDFS(Vertex(initial, 0, nullptr), goal, visited, iter, goalFound);
 }
 
 
@@ -274,7 +276,7 @@ void Dijkstra(const string& initial, const string& goal){
     int iter = 0;
     unordered_map<string, int> visited;
     vector<Vertex> adj;
-    adj.push_back(Vertex(initial, 0));
+    adj.push_back(Vertex(initial, 0, nullptr));
     while (adj.size() > 0){
         iter += 1;
         sort(adj.begin(), adj.end(), [](const Vertex& left, const Vertex& right){
@@ -299,4 +301,20 @@ void Dijkstra(const string& initial, const string& goal){
             }
         }
     }
+}
+
+void goalFound(Vertex* LastV){
+    cout << "\n\nPath found:" << endl;
+    //int depth = LastV->getDepth();
+    vector<Vertex*> finalPath;
+    finalPath.push_back(LastV);
+    //LastV.getPrevVert();
+    for (Vertex* i = LastV->getPrevVert(); i != nullptr; i = i->getPrevVert()){
+        finalPath.push_back(i);
+    }
+    for (int i = 0; i < LastV->getDepth() - 1; i++){
+        printState(*finalPath[i], finalPath[i]->getDepth(), false);
+    }
+    printState(*LastV, LastV->getDepth(), true);
+
 }
